@@ -2,6 +2,7 @@ import pygame
 import os
 from utils import load_image
 import random
+import globals
 
 class spritesheet(object):
     def __init__(self, filename):
@@ -33,11 +34,12 @@ class spritesheet(object):
         return self.images_at(tups, colorkey)
 
 class Map:
+    global SCREEN_WIDTH
+    global SCREEN_HEIGHT
     
-    def __init__(self):
-        self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 640, 480
+    def __init__(self, screen):
         self.tile_size = 16
-        self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT), 0, 16)
+        self.screen = screen
         self.bg_image = load_image("bg_test.png")[0]
         self.ss = spritesheet("assets/spritesheet/tileset_florest.png")
         self.draw_backgroundii(self.screen)
@@ -46,8 +48,8 @@ class Map:
     """    
     def draw_background(self,screen):
         bg_image = load_image("map_tiles/Outdoors_04.png")[0]
-        for row in range(int(self.SCREEN_HEIGHT/self.tile_size)):
-            for col in range(int(self.SCREEN_WIDTH/self.tile_size)):
+        for row in range(int(globals.SCREEN_HEIGHT/self.tile_size)):
+            for col in range(int(globals.SCREEN_WIDTH/self.tile_size)):
                 screen.blit(bg_image, (col*self.tile_size,row*self.tile_size))
     """   
     def draw_backgroundii(self,screen):
@@ -61,8 +63,8 @@ class Map:
         num_of_rocks = 20
         rock_image = load_image("spritesheet/props_big_stone.png")[0]
         for item in range(num_of_rocks):
-            rand_width = random.randrange(0,self.SCREEN_WIDTH-self.tile_size,1)
-            rand_height = random.randrange(0,self.SCREEN_WIDTH-self.tile_size,1)
+            rand_width = random.randrange(0,globals.SCREEN_WIDTH-self.tile_size,1)
+            rand_height = random.randrange(0,globals.SCREEN_WIDTH-self.tile_size,1)
             screen.blit(rock_image, (rand_width,rand_height))
             rock_image.set_alpha(None)
             rock_image.set_colorkey((255,0,255))
