@@ -2,27 +2,25 @@
 import pygame
 import os
 from utils import load_image
+from map import *
  
 # define a main function
 def main():
      
     # initialize the pygame module
     pygame.init()
+    
     # load and set the logo
     logo = pygame.image.load(os.path.join("assets/topdown_shooter/characters/","1.png"))
     pygame.display.set_icon(logo)   
     pygame.display.set_caption("minimal program")
     
-    # set background image (later will rewrite to create background out of tiles)
-    SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
-    surface = pygame.Surface(screen.get_size())
-    surface = surface.convert()
-    surface.fill((255,255,255))
-    bg_image = load_image("bg_test.png")[0]
-    screen.blit(bg_image, (0,0))
-    pygame.display.flip()
-     
+    # create instance of Map and draw the map
+    draw_map = Map()
+    
+    clock = pygame.time.Clock()
+    pygame.key.set_repeat(1, 40)
+    
     # define a variable to control the main loop
     running = True
      
