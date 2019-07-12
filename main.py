@@ -1,6 +1,7 @@
 # import the pygame module, so you can use it
 import pygame
 import os
+from utils import load_image
  
 # define a main function
 def main():
@@ -11,9 +12,16 @@ def main():
     logo = pygame.image.load(os.path.join("assets/topdown_shooter/characters/","1.png"))
     pygame.display.set_icon(logo)   
     pygame.display.set_caption("minimal program")
-     
-    # create a surface on screen that has the size of 240 x 180
-    screen = pygame.display.set_mode((240,180))
+    
+    # set background image (later will rewrite to create background out of tiles)
+    SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
+    surface = pygame.Surface(screen.get_size())
+    surface = surface.convert()
+    surface.fill((255,255,255))
+    bg_image = load_image("bg_test.png")[0]
+    screen.blit(bg_image, (0,0))
+    pygame.display.flip()
      
     # define a variable to control the main loop
     running = True
