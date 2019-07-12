@@ -1,5 +1,6 @@
 import os
 import pygame
+import os
 
 def load_image(name):
     fullname = os.path.join('assets', name)

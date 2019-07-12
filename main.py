@@ -1,12 +1,15 @@
 # import the pygame module, so you can use it
 import pygame
 import os
+from sprites import Sprites
 from utils import load_image
 from map import *
+import globals
  
 # define a main function
 def main():
-     
+    globals.init()
+    
     # initialize the pygame module
     pygame.init()
     
@@ -15,8 +18,12 @@ def main():
     pygame.display.set_icon(logo)   
     pygame.display.set_caption("minimal program")
     
+    screen = pygame.display.set_mode((globals.SCREEN_WIDTH, globals.SCREEN_HEIGHT), 0, 16)
+    
     # create instance of Map and draw the map
-    draw_map = Map()
+    game_map = Map(screen)
+    sprites = Sprites(screen)
+    pygame.display.flip()
     
     clock = pygame.time.Clock()
     pygame.key.set_repeat(1, 40)
