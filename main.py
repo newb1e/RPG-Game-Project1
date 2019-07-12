@@ -2,21 +2,34 @@
 import pygame
 import os
 from sprites import Sprites
+from utils import load_image
+from map import *
+import globals
  
 # define a main function
 def main():
-     
+    globals.init()
+    
     # initialize the pygame module
     pygame.init()
+    
     # load and set the logo
     logo = pygame.image.load(os.path.join("assets/topdown_shooter/characters/","1.png"))
     pygame.display.set_icon(logo)   
     pygame.display.set_caption("minimal program")
-    # create a surface on screen that has the size of 240 x 180
-    screen = pygame.display.set_mode((240,180))
+    
+    screen = pygame.display.set_mode((globals.SCREEN_WIDTH, globals.SCREEN_HEIGHT), 0, 16)
+    
+    # create instance of Map and draw the map
+    game_map = Map(screen)
+    sprites = Sprites(screen)
+    pygame.display.flip()
+    
+    clock = pygame.time.Clock()
+    pygame.key.set_repeat(1, 40)
+    
     # define a variable to control the main loop
     running = True
-    sprites = Sprites(screen)
      
     # main loop
     while running:
