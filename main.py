@@ -1,6 +1,7 @@
 # import the pygame module, so you can use it
 import pygame
 import os
+from sprites import Sprites
  
 # define a main function
 def main():
@@ -11,12 +12,11 @@ def main():
     logo = pygame.image.load(os.path.join("assets/topdown_shooter/characters/","1.png"))
     pygame.display.set_icon(logo)   
     pygame.display.set_caption("minimal program")
-     
     # create a surface on screen that has the size of 240 x 180
     screen = pygame.display.set_mode((240,180))
-     
     # define a variable to control the main loop
     running = True
+    sprites = Sprites(screen)
      
     # main loop
     while running:
