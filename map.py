@@ -13,7 +13,6 @@ class Map:
     def __init__(self, screen):
         self.tile_size = 16
         self.screen = screen
-        self.bg_image = load_image("bg_test.png")[0]
         self.ss = Spritesheet("assets/spritesheet/tileset_florest.png")
         self.draw_background(self.screen)
         
@@ -63,9 +62,12 @@ class Map:
 class Camera:
     
     def __init__(self, width, height):
-        self.camera = pg.Rect(0, 0, width, height)
+        self.camera = pygame.Rect(0, 0, width, height)
         self.width = width
         self.height = height
+        
+    def move(self, move_x, move_y):
+        self.camera = 
     
     
         
