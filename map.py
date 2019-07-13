@@ -50,12 +50,35 @@ class Map:
             rand_width = random.randrange(0, self.width-64, 16)
             rand_height = random.randrange(0, self.height-64, 16)
             map_surface.blit(tile_image, (rand_width, rand_height))
-
+"""
     def player_walking_radius(self, radius):
         circle_location = (int(self.screen_width/2),int(self.screen_height/2))
         surface = pygame.Surface((self.screen_width,self.screen_height), pygame.SRCALPHA)
         circle = pygame.draw.circle(surface, (99, 101, 99,128), circle_location, radius)
+        #rect = pygame.Rect()
         return surface
+"""
+  
+class Walking_zone(pygame.sprite.Sprite):
+    # Constructor. Pass in the color of the block,
+    # and its x and y position
+    def __init__(self, color, width, height):
+        rect_position = (int((globals.SCREEN_WIDTH/2)-width/2),int((globals.SCREEN_HEIGHT/2)-height/2))
+        # Call the parent class (Sprite) constructor
+        pygame.sprite.Sprite.__init__(self)
+
+        # Create an image of the block, and fill it with a color.
+        # This could also be an image loaded from the disk.
+        self.image = pygame.Surface([width, height])
+        self.image.set_alpha(128)
+        self.image.fill(color)
+
+        # Fetch the rectangle object that has the dimensions of the image
+        # Update the position of this object by setting the values of rect.x and rect.y
+        self.rect = self.image.get_rect()
+        self.rect.x = rect_position[0] 
+        self.rect.y = rect_position[1]
+
         
 
 
