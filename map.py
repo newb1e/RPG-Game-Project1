@@ -14,7 +14,6 @@ class Map:
         self.bg_image = load_image("bg_test.png")[0]
         self.draw_background(self.screen)
         self.draw_rocks(self.screen)
-        pygame.display.flip()
         
     def draw_background(self,screen):
         #num_of_tiles = (self.SCREEN_HEIGHT+self.SCREEN_HEIGHT)/tile_size
