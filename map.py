@@ -3,47 +3,28 @@ import os
 from utils import load_image
 import random
 import globals
+from spritesheet import Spritesheet
 
-class spritesheet(object):
-    def __init__(self, filename):
-        try:
-            self.sheet = pygame.image.load(filename).convert()
-        except pygame.error as message:
-            print ('Unable to load spritesheet image:', filename)
-            raise SystemExit(message)
-    # Load a specific image from a specific rectangle
-    def image_at(self, rectangle, colorkey = None):
-        "Loads image from x,y,x+offset,y+offset"
-        rect = pygame.Rect(rectangle)
-        image = pygame.Surface(rect.size).convert()
-        image.blit(self.sheet, (0, 0), rect)
-        if colorkey is not None:
-            if colorkey is -1:
-                colorkey = image.get_at((0,0))
-            image.set_colorkey(colorkey, pygame.RLEACCEL)
-        return image
-    # Load a whole bunch of images and return them as a list
-    def images_at(self, rects, colorkey = None):
-        "Loads multiple images, supply a list of coordinates" 
-        return [self.image_at(rect, colorkey) for rect in rects]
-    # Load a whole strip of images
-    def load_strip(self, rect, image_count, colorkey = None):
-        "Loads a strip of images and returns them as a list"
-        tups = [(rect[0]+rect[2]*x, rect[1], rect[2], rect[3])
-                for x in range(image_count)]
-        return self.images_at(tups, colorkey)
 
 class Map:
     global SCREEN_WIDTH
     global SCREEN_HEIGHT
-    
+
     def __init__(self, screen):
         self.tile_size = 16
         self.screen = screen
         self.bg_image = load_image("bg_test.png")[0]
-        self.ss = spritesheet("assets/spritesheet/tileset_florest.png")
-        self.draw_backgroundii(self.screen)
-        self.draw_rocks(self.screen)
+        self.ss = Spritesheet("assets/spritesheet/tileset_florest.png")
+        self.draw_background(self.screen)
+        
+        self.draw_tile(self.screen, "map_tiles/Outdoors_15.png",10)  # Draw rocks
+        self.draw_tile(self.screen, "map_tiles/Outdoors_17.png",12)  # Draw stems
+        self.draw_tile(self.screen, "spritesheet/props_tree.png", 5)
+        self.draw_tile(self.screen, "spritesheet/props_tree_goup.png", 3)
+        self.draw_tile(self.screen, "spritesheet/props_skull.png", 4)
+        self.draw_tile(self.screen, "spritesheet/props_grasschest_closed.png", 4)
+        
+        self.player_walking_radius(self.screen, 60)
         pygame.display.flip()
     """    
     def draw_background(self,screen):
@@ -51,21 +32,40 @@ class Map:
         for row in range(int(globals.SCREEN_HEIGHT/self.tile_size)):
             for col in range(int(globals.SCREEN_WIDTH/self.tile_size)):
                 screen.blit(bg_image, (col*self.tile_size,row*self.tile_size))
-    """   
-    def draw_backgroundii(self,screen):
-        bg_image = self.ss.image_at((0, 0, 16, 16))
-        for row in range(int(self.SCREEN_HEIGHT/self.tile_size)):
-            for col in range(int(self.SCREEN_WIDTH/self.tile_size)):
-                screen.blit(bg_image, (col*self.tile_size,row*self.tile_size))
+    """
+
+    def draw_background(self, screen):
+        bg_image = self.ss.image_at((53, 0, 16, 16))
+        for row in range(int(globals.SCREEN_HEIGHT/self.tile_size)):
+            for col in range(int(globals.SCREEN_WIDTH/self.tile_size)):
+                screen.blit(bg_image, (col*self.tile_size, row*self.tile_size))
+
+    def draw_tile(self, screen, image, num_of_tiles):
+        num_of_stems = 10
+        tile_image = load_image(image)[0]
+        if "spritesheet" in image:
+            tile_image.set_colorkey((99, 101, 99))
+        else:
+            tile_image.set_colorkey((0, 0, 0))
+        for item in range(num_of_tiles):
+            rand_width = random.randrange(0, globals.SCREEN_WIDTH-64, 16)
+            rand_height = random.randrange(0, globals.SCREEN_HEIGHT-64, 16)
+            screen.blit(tile_image, (rand_width, rand_height))
+
+    def player_walking_radius(self, screen, radius):
+        circle_location = (int(globals.SCREEN_WIDTH/2),int(globals.SCREEN_HEIGHT/2))
+        surface = pygame.Surface((globals.SCREEN_WIDTH,globals.SCREEN_HEIGHT), pygame.SRCALPHA)
+        circle = pygame.draw.circle(surface, (99, 101, 99,128), circle_location, radius)
+        screen.blit(surface, (0,0))
         
+
+
+class Camera:
     
-    def draw_rocks(self,screen):
-        num_of_rocks = 20
-        rock_image = load_image("spritesheet/props_big_stone.png")[0]
-        for item in range(num_of_rocks):
-            rand_width = random.randrange(0,globals.SCREEN_WIDTH-self.tile_size,1)
-            rand_height = random.randrange(0,globals.SCREEN_WIDTH-self.tile_size,1)
-            screen.blit(rock_image, (rand_width,rand_height))
-            rock_image.set_alpha(None)
-            rock_image.set_colorkey((255,0,255))
+    def __init__(self, width, height):
+        self.camera = pg.Rect(0, 0, width, height)
+        self.width = width
+        self.height = height
+    
+    
         
