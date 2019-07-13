@@ -22,8 +22,7 @@ def main():
     
     # create instance of Map and draw the map
     game_map = Map(screen)
-    sprites = Sprites(screen)
-    pygame.display.flip()
+    sprites = Sprites()
     
     clock = pygame.time.Clock()
     pygame.key.set_repeat(1, 40)
@@ -35,6 +34,10 @@ def main():
     while running:
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
+            sprites.all_sprites_list.draw(screen)
+            sprites.all_sprites_list.update()
+            
+            pygame.display.flip()
             # only do something if the event is of type QUIT
             if event.type == pygame.QUIT:
                 # change the value to False, to exit the main loop
