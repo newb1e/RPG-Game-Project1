@@ -34,7 +34,7 @@ def main():
     while running:
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
-            sprites.all_sprites_list.draw(screen)
+            sprites.all_sprites_list.draw(screen)s
             sprites.all_sprites_list.update()
             
             pygame.display.flip()
