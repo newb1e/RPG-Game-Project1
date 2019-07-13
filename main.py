@@ -34,6 +34,8 @@ def main():
     while running:
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
+            screen.blit(game_map.get_map(),(50,50))
+            screen.blit(game_map.player_walking_radius(60),(0,0))
             sprites.all_sprites_list.draw(screen)
             sprites.all_sprites_list.update()
             
