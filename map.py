@@ -11,6 +11,8 @@ class Map:
         self.screen = screen
         self.width = globals.MAP_WIDTH
         self.height = globals.MAP_HEIGHT
+        self.x = 0
+        self.y = 0 
         self.screen_width = globals.SCREEN_WIDTH
         self.screen_height = globals.SCREEN_HEIGHT
         self.tile_size = 16
@@ -50,6 +52,10 @@ class Map:
             rand_width = random.randrange(0, self.width-64, 16)
             rand_height = random.randrange(0, self.height-64, 16)
             map_surface.blit(tile_image, (rand_width, rand_height))
+            
+    def move_map(self, direction, speed):
+        
+            self.map_surface.blit(self.get_map(),(self.x+speed,self.y+speed))
 """
     def player_walking_radius(self, radius):
         circle_location = (int(self.screen_width/2),int(self.screen_height/2))

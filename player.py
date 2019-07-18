@@ -24,16 +24,16 @@ class Player(pg.sprite.Sprite):
         self.pos = vec(x, y)
         self.health = self.PLAYER_HEALTH
 
-    def get_keys(self):
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.pos = vec(self.pos.x - self.PLAYER_SPEED, self.pos.y)
-        if keys[pg.K_RIGHT] or keys[pg.K_d]:
-             self.pos = vec(self.pos.x + self.PLAYER_SPEED, self.pos.y)
-        if keys[pg.K_UP] or keys[pg.K_w]:
-             self.pos = vec(self.pos.x, self.pos.y - self.PLAYER_SPEED)
-        if keys[pg.K_DOWN] or keys[pg.K_s]:
-           self.pos = vec(self.pos.x, self.pos.y + self.PLAYER_SPEED)
+    # def get_keys(self):
+    #     keys = pg.key.get_pressed()
+    #     if keys[pg.K_LEFT] or keys[pg.K_a]:
+    #         self.pos = vec(self.pos.x - self.PLAYER_SPEED, self.pos.y)
+    #     if keys[pg.K_RIGHT] or keys[pg.K_d]:
+    #          self.pos = vec(self.pos.x + self.PLAYER_SPEED, self.pos.y)
+    #     if keys[pg.K_UP] or keys[pg.K_w]:
+    #          self.pos = vec(self.pos.x, self.pos.y - self.PLAYER_SPEED)
+    #     if keys[pg.K_DOWN] or keys[pg.K_s]:
+    #        self.pos = vec(self.pos.x, self.pos.y + self.PLAYER_SPEED)
             # self.shoot()
 
             # def shoot(self):
@@ -66,7 +66,7 @@ class Player(pg.sprite.Sprite):
                             colorkey=(255, 255, 255))
 
     def update(self):
-        self.get_keys()
+        #self.get_keys()
         # self.rot = (self.rot + self.rot_speed) % 360  # * self.game.dt
         # self.image = pg.transform.rotate(self.image, self.rot)
         # if self.damaged:

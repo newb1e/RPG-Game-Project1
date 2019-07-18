@@ -4,6 +4,7 @@ import os
 from sprites import Sprites
 from utils import load_image
 from map import *
+from map2 import *
 import globals
  
 # define a main function
@@ -21,7 +22,8 @@ def main():
     screen = pygame.display.set_mode((globals.SCREEN_WIDTH, globals.SCREEN_HEIGHT), 0, 16)
     
     # create instance of Map and draw the map
-    game_map = Map(screen)
+    #game_map = Map(screen)
+    game_map2 = Map2(screen)
     sprites = Sprites()
     
     clock = pygame.time.Clock()
@@ -33,9 +35,19 @@ def main():
     # main loop
     while running:
         # event handling, gets all event from the event queue
-        for event in pygame.event.get():
-            screen.blit(game_map.get_map(),(50,50))
-            #screen.blit(game_map.player_walking_radius(60),(0,0))
+         game_map2.draw_map(0, 0)
+         for event in pygame.event.get():
+             
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                game_map2.draw_map(2, 0)
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                game_map2.draw_map(-2, 0)
+            if keys[pygame.K_UP] or keys[pygame.K_w]:
+                game_map2.draw_map(0, 2)    
+            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                game_map2.draw_map(0, -2)
+        
             sprites.all_sprites_list.draw(screen)
             sprites.all_sprites_list.update()
             
