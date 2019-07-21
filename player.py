@@ -1,12 +1,11 @@
-import pygame as pg
+import pygame
 import spritesheet
+import globals
 from utils import load_image
-vec = pg.math.Vector2
+vec = pygame.math.Vector2
 
-
-class Player(pg.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     PLAYER_HEALTH = 100
-    PLAYER_SPEED = 5
     PLAYER_ROT_SPEED = 200
     PLAYER_IMAGE_PATH = "topdown_shooter/characters"
     PLAYER_IMAGE_NORTH = "1_north.png"
@@ -23,16 +22,21 @@ class Player(pg.sprite.Sprite):
         self.rot = 0
         self.pos = vec(x, y)
         self.health = self.PLAYER_HEALTH
+        self.walking_zone = Walking_zone((99, 101, 99), 100, 100)
 
     def get_keys(self):
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT] or keys[pg.K_a]:
+        keys = pygame.key.get_pressed()
+        
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.pos = vec(self.pos.x - self.PLAYER_SPEED, self.pos.y)
-        if keys[pg.K_RIGHT] or keys[pg.K_d]:
+            
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
              self.pos = vec(self.pos.x + self.PLAYER_SPEED, self.pos.y)
-        if keys[pg.K_UP] or keys[pg.K_w]:
+             
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
              self.pos = vec(self.pos.x, self.pos.y - self.PLAYER_SPEED)
-        if keys[pg.K_DOWN] or keys[pg.K_s]:
+             
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
            self.pos = vec(self.pos.x, self.pos.y + self.PLAYER_SPEED)
             # self.shoot()
 
@@ -66,7 +70,7 @@ class Player(pg.sprite.Sprite):
                             colorkey=(255, 255, 255))
 
     def update(self):
-        self.get_keys()
+        #self.get_keys()
         # self.rot = (self.rot + self.rot_speed) % 360  # * self.game.dt
         # self.image = pg.transform.rotate(self.image, self.rot)
         # if self.damaged:
@@ -87,3 +91,25 @@ class Player(pg.sprite.Sprite):
         #     self.health += amount
         #     if self.health > PLAYER_HEALTH:
         #         self.health = PLAYER_HEALTH
+
+
+class Walking_zone(pygame.sprite.Sprite):
+    # Constructor. Pass in the color of the block,
+    # and its x and y position
+    def __init__(self, color, width, height):
+        rect_position = (int((globals.SCREEN_WIDTH/2)-width/2),int((globals.SCREEN_HEIGHT/2)-height/2))
+        # Call the parent class (Sprite) constructor
+        pygame.sprite.Sprite.__init__(self)
+
+        # Create an image of the block, and fill it with a color.
+        # This could also be an image loaded from the disk.
+        self.image = pygame.Surface([width, height])
+        self.image.set_alpha(128)
+        self.image.fill(color)
+
+        # Fetch the rectangle object that has the dimensions of the image
+        # Update the position of this object by setting the values of rect.x and rect.y
+        self.rect = self.image.get_rect()
+        self.rect.x = rect_position[0] 
+        self.rect.y = rect_position[1]
+        
