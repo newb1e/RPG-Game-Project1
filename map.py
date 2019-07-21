@@ -5,101 +5,70 @@ import random
 import globals
 from spritesheet import Spritesheet
 
-
-class Map:
+class Map():
     def __init__(self,screen):
         self.screen = screen
-        self.width = globals.MAP_WIDTH
-        self.height = globals.MAP_HEIGHT
-        self.x = 0
-        self.y = 0 
-        self.screen_width = globals.SCREEN_WIDTH
-        self.screen_height = globals.SCREEN_HEIGHT
-        self.tile_size = 16
-        self.map_surface = pygame.Surface((self.width,self.height), pygame.SRCALPHA)
-        self.ss = Spritesheet("assets/spritesheet/tileset_florest.png")
-        self.draw_background(self.map_surface)
+        self.bg_image = pygame.image.load("assets/bg_test.png")
+        self.bg_rect = self.bg_image.get_rect()
+        self.map_size = (width, height) = self.bg_image.get_size()
+        self.map_artifacts = pygame.sprite.Group()
+        self.create_artifacts()
         
-        self.draw_tile(self.map_surface, "map_tiles/Outdoors_15.png",10)  # Draw rocks
-        self.draw_tile(self.map_surface, "map_tiles/Outdoors_17.png",12)  # Draw stems
-        self.draw_tile(self.map_surface, "spritesheet/props_tree.png", 5)
-        self.draw_tile(self.map_surface, "spritesheet/props_tree_goup.png", 3)
-        self.draw_tile(self.map_surface, "spritesheet/props_skull.png", 4)
-        self.draw_tile(self.map_surface, "spritesheet/props_grasschest_closed.png", 4)
+    def draw_map(self, x, y):
+        self.move_map(x, y)
+        self.screen.blit(self.bg_image, self.bg_rect)
+        self.map_artifacts.draw(self.screen)
+    
+    def move_map(self, x, y):
+        border = (globals.SCREEN_WIDTH - self.bg_rect.width, globals.SCREEN_HEIGHT - self.bg_rect.height)
         
-        #self.player_walking_radius(self.screen, 60)
-        #return self.map_surface
-        #screen.blit(self.map_surface,(100,100))
-        #pygame.display.flip()
-        
-    def get_map(self):
-        return self.map_surface
-
-    def draw_background(self, map_surface):
-        bg_image = self.ss.image_at((53, 0, 16, 16))
-        for row in range(int(self.height/self.tile_size)):
-            for col in range(int(self.width/self.tile_size)):
-                map_surface.blit(bg_image, (col*self.tile_size, row*self.tile_size))
-
-    def draw_tile(self, map_surface, image, num_of_tiles):
-        num_of_stems = 10
-        tile_image = load_image(image)[0]
-        if "spritesheet" in image:
-            tile_image.set_colorkey((99, 101, 99))
-        else:
-            tile_image.set_colorkey((0, 0, 0))
-        for item in range(num_of_tiles):
-            rand_width = random.randrange(0, self.width-64, 16)
-            rand_height = random.randrange(0, self.height-64, 16)
-            map_surface.blit(tile_image, (rand_width, rand_height))
+        if  self.bg_rect.x + x <= 0 and self.bg_rect.x + x >= border[0]:
+            self.bg_rect.x = self.bg_rect.x + x
+            self.move_artifacts(x, 0)
+        #else
+            #move player
+        if  self.bg_rect.y + y <= 0 and self.bg_rect.y + y >= border[1]:
+            self.bg_rect.y = self.bg_rect.y + y
+            self.move_artifacts(0, y)
+        #else
+            #move player
             
-    def move_map(self, direction, speed):
+    def move_artifacts(self, x, y):
+        for artifact in self.map_artifacts:
+            artifact.move(x, y)
+    
+    def create_artifacts(self):
+        for a in range(10):
+            # rocks
+            self.map_artifacts.add(Artifact(self.map_size, "assets/map_tiles/Outdoors_15.png"))
+            # stems
+            self.map_artifacts.add(Artifact(self.map_size, "assets/map_tiles/Outdoors_17.png"))
+            # tree
+            self.map_artifacts.add(Artifact(self.map_size, "assets/spritesheet/props_tree.png"))
+            
+            
+class Artifact(pygame.sprite.Sprite):
+    def __init__(self, map_size, image):
+        super().__init__()
         
-            self.map_surface.blit(self.get_map(),(self.x+speed,self.y+speed))
-"""
-    def player_walking_radius(self, radius):
-        circle_location = (int(self.screen_width/2),int(self.screen_height/2))
-        surface = pygame.Surface((self.screen_width,self.screen_height), pygame.SRCALPHA)
-        circle = pygame.draw.circle(surface, (99, 101, 99,128), circle_location, radius)
-        #rect = pygame.Rect()
-        return surface
-"""
-  
-class Walking_zone(pygame.sprite.Sprite):
-    # Constructor. Pass in the color of the block,
-    # and its x and y position
-    def __init__(self, color, width, height):
-        rect_position = (int((globals.SCREEN_WIDTH/2)-width/2),int((globals.SCREEN_HEIGHT/2)-height/2))
-        # Call the parent class (Sprite) constructor
-        pygame.sprite.Sprite.__init__(self)
-
-        # Create an image of the block, and fill it with a color.
-        # This could also be an image loaded from the disk.
-        self.image = pygame.Surface([width, height])
-        self.image.set_alpha(128)
-        self.image.fill(color)
-
-        # Fetch the rectangle object that has the dimensions of the image
-        # Update the position of this object by setting the values of rect.x and rect.y
+        self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
-        self.rect.x = rect_position[0] 
-        self.rect.y = rect_position[1]
-
-        
-
-
-class Camera:
+        self.rect.x = random.randrange(0, map_size[0], 16)
+        self.rect.y = random.randrange(0, map_size[1], 16)
     
-    def __init__(self, width, height):
-        self.camera = pygame.Rect(0, 0, width, height)
-        self.width = width
-        self.height = height
-        self.pos_x = int(width/2)
-        self.pos_y = int(height/2)
-        
-    def move(self, move_x, move_y):
-        self.pos_x += move_x 
-        self.pos_y += move_y
+    def add_artifact(image):
+        artifact = Artifact(self.map)
+        self.sprite_group.add    
     
+    def create_artifacts():
+        add_artifact("assets/map_tiles/Outdoors_15.png")
     
+    def move(self, x, y):
+            self.rect.x += x
+            self.rect.y += y
         
+        
+        
+        
+        
+    
